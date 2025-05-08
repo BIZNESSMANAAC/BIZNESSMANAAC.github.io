@@ -5,64 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Калькулятор Ипотеки</title>
   <link rel="stylesheet" href="styles.css" />
-  <style>
-    body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 1rem;
-    }
-
-    label {
-      display: block;
-      margin-top: 1rem;
-    }
-
-    input {
-      width: 100%;
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
-
-    button {
-      margin-top: 1.5rem;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      background-color: #0077cc;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #005fa3;
-    }
-
-    #result {
-      margin-top: 2rem;
-      font-weight: bold;
-    }
-  </style>
 </head>
 <body>
-  <h1>🏡 Калькулятор Ипотеки</h1>
-  <p><a href="ru.html">← Назад</a></p>
+  <div class="container">
+    <h1>🏡 Калькулятор Ипотеки</h1>
+    <p><a href="ru.html">← Назад</a></p>
 
-  <label>Сумма кредита (₽):
-    <input type="number" id="loanAmount" placeholder="Например, 3 000 000" />
-  </label>
+    <label>Сумма кредита (₽):
+      <input type="number" id="loanAmount" placeholder="Например, 3 000 000" />
+    </label>
 
-  <label>Процентная ставка (годовая, %):
-    <input type="number" step="0.01" id="interestRate" placeholder="Например, 10" />
-  </label>
+    <label>Процентная ставка (годовая, %):
+      <input type="number" step="0.01" id="interestRate" placeholder="Например, 10" />
+    </label>
 
-  <label>Срок кредита (в годах):
-    <input type="number" id="loanTerm" placeholder="Например, 20" />
-  </label>
+    <label>Срок кредита (в годах):
+      <input type="number" id="loanTerm" placeholder="Например, 20" />
+    </label>
 
-  <button onclick="calculateMortgage()">Рассчитать</button>
+    <button onclick="calculateMortgage()">Рассчитать</button>
 
-  <div id="result"></div>
+    <div id="result"></div>
+  </div>
 
   <script>
     function calculateMortgage() {
@@ -73,7 +37,7 @@
       const monthlyRate = annualRate / 12 / 100;
       const n = years * 12;
 
-      if (!P || !monthlyRate || !n) {
+      if (isNaN(P) || isNaN(annualRate) || isNaN(years) || P <= 0 || annualRate <= 0 || years <= 0) {
         document.getElementById("result").innerText = "Пожалуйста, заполните все поля корректно.";
         return;
       }
