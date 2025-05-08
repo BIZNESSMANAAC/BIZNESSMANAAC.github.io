@@ -11,14 +11,14 @@
   <div class="container">
     <h1>🏠 Mortgage Calculator</h1>
 
-    <label>Loan Amount ($):</label>
-    <input type="number" id="loan" placeholder="e.g. 100000"/>
+    <label for="loan">Loan Amount ($):</label>
+    <input type="number" id="loan" placeholder="e.g. 100000" min="1" required />
 
-    <label>Annual Interest Rate (%):</label>
-    <input type="number" id="interest" placeholder="e.g. 5"/>
+    <label for="interest">Annual Interest Rate (%):</label>
+    <input type="number" id="interest" placeholder="e.g. 5" min="0" step="0.01" required />
 
-    <label>Loan Term (years):</label>
-    <input type="number" id="years" placeholder="e.g. 30"/>
+    <label for="years">Loan Term (years):</label>
+    <input type="number" id="years" placeholder="e.g. 30" min="1" required />
 
     <button onclick="calculateMortgage()">Calculate</button>
 
@@ -29,22 +29,33 @@
 
   <script>
     function calculateMortgage() {
-      const loan = parseFloat(document.getElementById('loan').value);
-      const annualInterest = parseFloat(document.getElementById('interest').value) / 100;
-      const years = parseInt(document.getElementById('years').value);
-      const monthlyRate = annualInterest / 12;
-      const n = years * 12;
+      const loanInput = document.getElementById('loan').value;
+      const interestInput = document.getElementById('interest').value;
+      const yearsInput = document.getElementById('years').value;
+
+      const loan = parseFloat(loanInput);
+      const annualInterest = parseFloat(interestInput);
+      const years = parseInt(yearsInput);
 
       if (isNaN(loan) || isNaN(annualInterest) || isNaN(years)) {
-        document.getElementById('result').innerText = 'Please enter all values correctly.';
+        document.getElementById('result').innerText = '⚠️ Please enter all values correctly.';
         return;
       }
 
-      const monthlyPayment = loan * monthlyRate / (1 - Math.pow(1 + monthlyRate, -n));
-      const totalPayment = monthlyPayment * n;
+      const n = years * 12;
+      let monthlyPayment, totalPayment;
+
+      if (annualInterest === 0) {
+        monthlyPayment = loan / n;
+      } else {
+        const monthlyRate = annualInterest / 100 / 12;
+        monthlyPayment = loan * monthlyRate / (1 - Math.pow(1 + monthlyRate, -n));
+      }
+
+      totalPayment = monthlyPayment * n;
 
       document.getElementById('result').innerHTML = `
-        <h2>Results:</h2>
+        <h2>💰 Results:</h2>
         <p>Monthly Payment: <strong>$${monthlyPayment.toFixed(2)}</strong></p>
         <p>Total Payment Over ${years} Years: <strong>$${totalPayment.toFixed(2)}</strong></p>
       `;
